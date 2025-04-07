@@ -1,7 +1,9 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy import DateTime
+from sqlalchemy.orm import relationship
 from datetime import datetime
 from .database import Base
+
 
 
 class Blog(Base):
@@ -10,7 +12,10 @@ class Blog(Base):
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String)
     body = Column(String)
-    created_at = Column(DateTime, default=datetime.utcnow) 
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    user_id = Column(Integer, ForeignKey("users.id"))
+    creator = relationship("User", back_populates="blogs")
 
 
 class User(Base):
@@ -20,3 +25,5 @@ class User(Base):
     name = Column(String)
     email = Column(String)
     password = Column(String)
+
+    blogs = relationship("Blog", back_populates="creator")
