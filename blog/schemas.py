@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 from datetime import datetime
-from typing import Optional
+from typing import List, Optional
 
 class Blog(BaseModel):
     title: str
@@ -17,6 +17,7 @@ class User(BaseModel):
 class ShowUser(BaseModel):
     name: str
     email: str
+    blogs: List
 
     class Config():
         from_attributes = True
@@ -24,7 +25,7 @@ class ShowUser(BaseModel):
 class ShowBlog(BaseModel):
     title: str
     body: str
-    creator : Optional[ShowUser]
+    # creator : Optional[str]
     
     class Config():
         # orm_mode = True   #-> deprecated
