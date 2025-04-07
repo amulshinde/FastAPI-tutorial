@@ -20,19 +20,19 @@ def get_db():
 
 @app.post('/blog', status_code=status.HTTP_201_CREATED, tags=['blogs'])
 def create(request: schemas.Blog, db: Session = Depends(get_db)):
-    new_blog = models.Blog(title=request.title, body=request.body)
+    new_blog = models.Blog(title=request.title, body=request.body, user_id= request.user_id)
     db.add(new_blog)
     db.commit()
     db.refresh(new_blog)
     return new_blog
-
+ 
 
 @app.get('/blog', tags=['blogs'])
 def all(db: Session = Depends(get_db)):
     blogs = db.query(models.Blog).all()
     return blogs
 
-@app.get('/blog/{id}', status_code=200, tags=['blogs'])
+@app.get('/blog/{id}', status_code=200, response_model=schemas.ShowBlog, tags=['blogs'])
 def show(id, response: Response, db: Session = Depends(get_db)):
     blog = db.query(models.Blog).filter(models.Blog.id == id).first()
 
